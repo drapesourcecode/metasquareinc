@@ -9,19 +9,19 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # - name: Set branch-specific environment variables
-      #   id: vars
-      #   run: |
-      #     if [[ "${GITHUB_REF##*/}" == "prod" ]]; then
-      #       echo "DEPLOY_DIR=$HOME/apps/prod-funddecode" >> $GITHUB_ENV
-      #       echo "PM2_NAME=prod-funddecode" >> $GITHUB_ENV
-      #     else
-      #       echo "DEPLOY_DIR=$HOME/apps/main-funddecode" >> $GITHUB_ENV
-      #       echo "PM2_NAME=main-funddecode" >> $GITHUB_ENV
-      #     fi
+      - name: Set branch-specific environment variables
+        id: vars
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "prod" ]]; then
+            echo "DEPLOY_DIR=$HOME/apps/prod-funddecode" >> $GITHUB_ENV
+            echo "PM2_NAME=prod-funddecode" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_DIR=$HOME/apps/main-funddecode" >> $GITHUB_ENV
+            echo "PM2_NAME=main-funddecode" >> $GITHUB_ENV
+          fi
 
-      # - name: Add PM2 to PATH
-      #   run: echo "$HOME/.nvm/versions/node/v20.19.0/bin" >> $GITHUB_PATH
+      - name: Add PM2 to PATH
+        run: echo "$HOME/.nvm/versions/node/v20.19.0/bin" >> $GITHUB_PATH
 
       - name: Checkout code
         uses: actions/checkout@v4
