@@ -13,11 +13,11 @@ jobs:
         id: vars
         run: |
           if [[ "${GITHUB_REF##*/}" == "prod" ]]; then
-            echo "DEPLOY_DIR=$HOME/apps/prod-funddecode" >> $GITHUB_ENV
-            echo "PM2_NAME=prod-funddecode" >> $GITHUB_ENV
+            echo "DEPLOY_DIR=$HOME/apps/prod-metasquareinc" >> $GITHUB_ENV
+            echo "PM2_NAME=prod-metasquareinc" >> $GITHUB_ENV
           else
-            echo "DEPLOY_DIR=$HOME/apps/main-funddecode" >> $GITHUB_ENV
-            echo "PM2_NAME=main-funddecode" >> $GITHUB_ENV
+            echo "DEPLOY_DIR=$HOME/apps/main-metasquareinc" >> $GITHUB_ENV
+            echo "PM2_NAME=main-metasquareinc" >> $GITHUB_ENV
           fi
 
       - name: Add PM2 to PATH
