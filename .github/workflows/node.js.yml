@@ -20,8 +20,8 @@ jobs:
       #       echo "PM2_NAME=main-funddecode" >> $GITHUB_ENV
       #     fi
 
-      - name: Add PM2 to PATH
-        run: echo "$HOME/.nvm/versions/node/v20.19.0/bin" >> $GITHUB_PATH
+      # - name: Add PM2 to PATH
+      #   run: echo "$HOME/.nvm/versions/node/v20.19.0/bin" >> $GITHUB_PATH
 
       - name: Checkout code
         uses: actions/checkout@v4
