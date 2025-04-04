@@ -32,6 +32,10 @@ jobs:
       - name: Copy project to deploy directory
         run: |
           rsync -a --delete ./ ${{ env.DEPLOY_DIR }}/
+      - name: Create /home/app directory
+        run: |
+          sudo mkdir -p /home/app
+          sudo chown $USER:$USER /home/app  # Ensure the user running the script has access
 
       - name: Use branch-specific .env file
         run: |
