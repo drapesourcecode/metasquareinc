@@ -1,0 +1,62 @@
+name: Deploy Nuxt App (Self-hosted)
+
+on:
+  push:
+    branches: [ "main", "prod" ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Set branch-specific environment variables
+        id: vars
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "prod" ]]; then
+            echo "DEPLOY_DIR=$HOME/apps/prod-funddecode" >> $GITHUB_ENV
+            echo "PM2_NAME=prod-funddecode" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_DIR=$HOME/apps/main-funddecode" >> $GITHUB_ENV
+            echo "PM2_NAME=main-funddecode" >> $GITHUB_ENV
+          fi
+
+      - name: Add PM2 to PATH
+        run: echo "$HOME/.nvm/versions/node/v20.19.0/bin" >> $GITHUB_PATH
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create deploy directory
+        run: mkdir -p ${{ env.DEPLOY_DIR }}
+
+      - name: Copy project to deploy directory
+        run: |
+          rsync -a --delete ./ ${{ env.DEPLOY_DIR }}/
+
+      - name: Use branch-specific .env file
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "prod" ]]; then
+            cp .env.prod ${{ env.DEPLOY_DIR }}/.env
+          else
+            cp .env.main ${{ env.DEPLOY_DIR }}/.env
+          fi
+
+      - name: Install dependencies
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: npm install
+
+      - name: Build Nuxt app
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: npm run build
+
+      - name: Start or restart PM2 app
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: |
+          if pm2 list | grep -q "${{ env.PM2_NAME }}"; then
+            pm2 restart "${{ env.PM2_NAME }}"
+          else
+            pm2 start .output/server/index.mjs --name "${{ env.PM2_NAME }}"
+          fi
+
+      - name: Save PM2 process list
+        run: pm2 save
