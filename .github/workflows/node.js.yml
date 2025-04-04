@@ -21,7 +21,7 @@ jobs:
           fi
 
       - name: Add PM2 to PATH
-        run: echo "$HOME/.nvm/versions/node/v20.19.0/bin" >> $GITHUB_PATH
+        run: echo "$HOME/.nvm/versions/node/v21.7.3/bin" >> $GITHUB_PATH
 
       - name: Checkout code
         uses: actions/checkout@v4
